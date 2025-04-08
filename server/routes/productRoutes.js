@@ -5,9 +5,9 @@ import { checkPermission } from "../middleware/permissionMiddleware.js";
 
 const router = express.Router();
 
-router.get("/products", authenticateToken, checkPermission("view_products"), getAllProducts);
-router.post("/products", authenticateToken, checkPermission("create_products"), createProduct);
-router.put("/products/:product_id", authenticateToken, checkPermission("update_products"), updateProduct);
-router.delete("/products/:product_id", authenticateToken, checkPermission("delete_products"), deleteProduct);
+router.get("/products", authenticateToken, checkPermission("view",3), getAllProducts);
+router.post("/products", authenticateToken, checkPermission("create",3), createProduct);
+router.put("/products/:product_id", authenticateToken, checkPermission("update",3), updateProduct);
+router.delete("/products/:product_id", authenticateToken, checkPermission("delete",3), deleteProduct);
 
 export default router;

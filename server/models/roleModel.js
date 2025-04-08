@@ -1,18 +1,19 @@
 import db from "../config/db.js";
 
-    export class RoleModel {
-      
-//       //  Used in Permission Middleware
-      static async getPermissionsByRole(role_id) {
-        const [rows] = await db.query(
-          `SELECT p.permission_name FROM permissions p 
-          JOIN role_permissions rp ON p.permission_id = rp.permission_id 
-          WHERE rp.role_id = ?`, 
-          [role_id]
-        );
-        return rows.map(row => row.permission_name);
-      }
-    
+export class RoleModel {
+  // Returns array of { menu_id, permission_action } for a given role_id
+  static async getPermissionsByRole(role_id) {
+    const [rows] = await db.query(
+      `SELECT p.menu_id, p.permission_action
+       FROM permissions p
+       JOIN role_permissions rp ON p.permission_id = rp.permission_id
+       WHERE rp.role_id = ?`,
+      [role_id]
+    );
+    return rows; // [{ menu_id: 2, permission_action: 'create' }, ...]
+  }
+}
+
 //   //Role Model starts from here
 
 //       static async getAllRoles() {
@@ -37,7 +38,7 @@ import db from "../config/db.js";
 //       static async deleteRole(role_id) {
 //         await db.query("DELETE FROM roles WHERE role_id = ?", [role_id]);
 //       }
-    }
+  // }
     
   
 
