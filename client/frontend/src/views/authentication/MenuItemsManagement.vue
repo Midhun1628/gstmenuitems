@@ -3,9 +3,14 @@ import { ref, onMounted, shallowRef } from 'vue';
 import { useMenus } from '../../store/apps/menuItems';
 import { storeToRefs } from 'pinia';
 import type { Header, Item } from 'vue3-easy-data-table';
+import BaseBreadcrumb from '../../components/shared/BaseBreadcrumb.vue';
 
 const page = ref({ title: 'Menu Management' });
-const breadcrumbs = shallowRef([{ title: 'Menu', disabled: false }, { title: 'List', disabled: true }]);
+const breadcrumbs = ref([
+  { title: 'Menu-items', disabled: false, href: '#' },
+  { title: 'List', disabled: true, href: '#' }
+]);
+
 
 const store = useMenus();
 const { fetchMenus, createMenu, updateMenu, deleteMenu } = store;
@@ -53,7 +58,24 @@ const itemsSelected = ref<Item[]>([]);
   <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs" />
   <v-card elevation="0" variant="outlined" class="bg-surface" rounded="lg">
     <v-card-item>
-      <v-row justify="space-between">
+      <v-row justify="space-between" class="align-center" >
+
+        <v-col cols="12" md="3">
+              <v-text-field
+                type="text"
+                variant="outlined"
+                persistent-placeholder
+                placeholder="Search products..."
+                v-model="searchValue"
+                density="comfortable"
+                hide-details
+              >
+                <template v-slot:prepend-inner>
+                  <SvgSprite name="custom-search" class="text-lightText" style="width: 14px; height: 14px" />
+                </template>
+              </v-text-field>
+            </v-col>
+        
         <v-col cols="12" md="3" class="d-flex justify-end">
           <v-dialog v-model="dialog">
             <template #activator="{ props }">

@@ -58,8 +58,8 @@ const routes = [
         component: ProductManagement,
       },
       {
-        path:'/menuitems',
-        components:MenuItemsManagement,
+        path:'/menuitems-management',
+        component:MenuItemsManagement,
       },
       // {
       //   path:'/role',

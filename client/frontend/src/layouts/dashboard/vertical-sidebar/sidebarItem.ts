@@ -18,7 +18,8 @@ const sidebarItem: menu[] = [
   },
   {
     title: 'Product Management',
-    to: '/product-management'
+
+    to: '/product-management',
   },
   // {
   //   title: 'Role Management',
@@ -26,7 +27,7 @@ const sidebarItem: menu[] = [
   // },
   {
     title:'Menu Items',
-    to:'/menuitems'
+    to:'/menuitems-management',
   }
 ];
 
