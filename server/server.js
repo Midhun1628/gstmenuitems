@@ -6,6 +6,9 @@ import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 // import roleRoutes from "./routes/roleRoutes.js";
 import menuRoutes from "./routes/menuRoutes.js";
+import cookieParser from 'cookie-parser';
+
+
 dotenv.config();
 const app = express();
 
@@ -15,6 +18,8 @@ app.use(cors({
     credentials: true, // Allow cookies/auth headers
   }));
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);

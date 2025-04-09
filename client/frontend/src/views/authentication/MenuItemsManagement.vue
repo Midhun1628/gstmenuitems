@@ -11,7 +11,7 @@ const breadcrumbs = ref([
   { title: 'List', disabled: true, href: '#' }
 ]);
 
-
+const searchValue=ref('')
 const store = useMenus();
 const { fetchMenus, createMenu, updateMenu, deleteMenu } = store;
 const { getMenus } = storeToRefs(store);

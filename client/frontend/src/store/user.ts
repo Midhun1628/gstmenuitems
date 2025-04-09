@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
+import axios from '../../axios/axiosInstance.js';
 
 export const useUsersStore = defineStore('users', {
   state: () => ({ users: [] }),

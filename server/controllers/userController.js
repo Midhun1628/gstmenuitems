@@ -29,8 +29,9 @@ export const createUser = async (req, res) => {
     const userExists = await UserModel.findByEmail(email);
     
     if (userExists) return res.status(400).json({ message: "User already exists" });
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const userId = await UserModel.createUser(username, email, password, first_name, last_name, role_id);
+    const userId = await UserModel.createUser(username, email, hashedPassword, first_name, last_name, role_id);
     
     res.json({ message: "User created successfully", userId });
   } catch (error) {

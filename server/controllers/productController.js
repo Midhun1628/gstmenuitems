@@ -11,9 +11,9 @@ export const getAllProducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, price, stock } = req.body;
+    const { product_name, description, price, stock } = req.body;
 
-    const productId = await ProductModel.createProduct(name, description, price, stock);
+    const productId = await ProductModel.createProduct(product_name, description, price, stock);
     
     res.json({ message: "Product created successfully", productId });
   } catch (error) {
@@ -24,9 +24,9 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const { product_id } = req.params;
-    const { name, description, price, stock } = req.body;
+    const { product_name, description, price, stock } = req.body;
 
-    await ProductModel.updateProduct(product_id, name, description, price, stock);
+    await ProductModel.updateProduct(product_id, product_name, description, price, stock);
 
     res.json({ message: "Product updated successfully" });
   } catch (error) {

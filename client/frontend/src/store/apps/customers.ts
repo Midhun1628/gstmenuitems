@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
+import axios from '../../../axios/axiosInstance';
 
 export const useCustomers = defineStore('customers', {
   state: () => ({
@@ -12,7 +12,7 @@ export const useCustomers = defineStore('customers', {
     async fetchCustomers() {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/user/users', {
+        const response = await axios.get('http://localhost:3000/user/users',{
           headers: { Authorization: `Bearer ${token}` }
         });
 

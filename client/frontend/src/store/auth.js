@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     
-    async register(username, email, password,firstname,lastname) {
+    async register(username, email, password,firstname,lastname,role_id) {
       try {
         await axios.post('http://localhost:3000/auth/register', { username, email, password,first_name: firstname,last_name: lastname,role_id });
       } catch (error) {

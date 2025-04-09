@@ -20,18 +20,18 @@ export class ProductModel {
     return rows[0];
   }
 
-  static async createProduct(name, description, price, stock) {
+  static async createProduct(product_name, low_stock_level, price, stock) {
     const [result] = await db.query(
-      "INSERT INTO products (name, description, price, stock) VALUES (?, ?, ?, ?)",
-      [name, description, price, stock]
+      "INSERT INTO products (product_name, low_stock_level, retail_price, stock_quantity) VALUES (?, ?, ?, ?)",
+      [product_name, low_stock_level, price, stock]
     );
     return result.insertId;
   }
 
-  static async updateProduct(product_id, name, description, price, stock) {
+  static async updateProduct( product_name, low_stock_level, price, stock,product_id) {
     await db.query(
-      "UPDATE products SET name = ?, description = ?, price = ?, stock = ? WHERE product_id = ?",
-      [name, description, price, stock, product_id]
+      "UPDATE products SET product_name = ?, low_stock_level = ?, retail_price = ?, stock_quantity = ? WHERE product_id = ?",
+      [product_name, low_stock_level, price, stock, product_id]
     );
   }
 

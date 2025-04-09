@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
+import axios from '../../../../axios/axiosInstance'; // Use this instead of default axios
 import SvgSprite from '../../../components/shared/SvgSprite.vue';
 // import { VueReCaptcha, useReCaptcha } from 'vue-recaptcha-v3';
 
@@ -10,7 +10,7 @@ const router = useRouter();
 // const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
 // Form State
-const email = ref('jude@gmail.com');
+const email = ref('steve@gmail.com');
 const password = ref('111');
 const showPassword = ref(false);
 const errorMsg = ref('');
