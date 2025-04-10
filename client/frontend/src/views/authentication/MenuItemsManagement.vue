@@ -18,25 +18,25 @@ const { getMenus } = storeToRefs(store);
 
 const dialog = ref(false);
 const isEditMode = ref(false);
-const form = ref({ menu_id: null as number | null, menu_name: '' });
+const form = ref({ menu_id: null as number | null, menu_name: '' ,component_path: ''});
 
 const openAddModal = () => {
-  form.value = { menu_id: null, menu_name: '' };
+  form.value = { menu_id: null, menu_name: '', component_path: ' ' };
   isEditMode.value = false;
   dialog.value = true;
 };
 
 const editMenu = (item: any) => {
-  form.value = { menu_id: item.menu_id, menu_name: item.menu_name };
+  form.value = { menu_id: item.menu_id, menu_name: item.menu_name ,component_path: item.component_path };
   isEditMode.value = true;
   dialog.value = true;
 };
 
 const handleSubmit = async () => {
   if (isEditMode.value && form.value.menu_id !== null) {
-    await updateMenu(form.value.menu_id, { menu_name: form.value.menu_name });
+    await updateMenu(form.value.menu_id, { menu_name: form.value.menu_name ,component_path: form.value.component_path });
   } else {
-    await createMenu({ menu_name: form.value.menu_name });
+    await createMenu({ menu_name: form.value.menu_name ,component_path: form.value.component_path });
   }
   dialog.value = false;
 };
@@ -48,6 +48,8 @@ onMounted(() => {
 const headers: Header[] = [
   { text: 'Menu ID', value: 'menu_id', sortable: true },
   { text: 'Menu Name', value: 'menu_name', sortable: true },
+  { text: 'Component Path', value: 'component_path', sortable: true },
+
   { text: 'Actions', value: 'operation' },
 ];
 
@@ -96,6 +98,20 @@ const itemsSelected = ref<Item[]>([]);
                   density="comfortable"
                 />
               </v-card-text>
+
+
+              <v-card-text>
+                <v-text-field
+                  v-model="form.component_path"
+                  label="Component Path"
+                  variant="outlined"
+                  hide-details
+                  density="comfortable"
+                />
+              </v-card-text>
+
+
+
               <v-card-actions>
                 <v-spacer />
                 <v-btn text color="error" @click="dialog = false">Cancel</v-btn>

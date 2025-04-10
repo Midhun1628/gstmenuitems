@@ -1,3 +1,4 @@
+import CategoryModel from '../models/CategoryModel.js'; // Make sure this exists
 import { ProductModel } from "../models/productModel.js";
 
 export const getAllProducts = async (req, res) => {
@@ -21,18 +22,29 @@ export const createProduct = async (req, res) => {
   }
 };
 
+
 export const updateProduct = async (req, res) => {
   try {
     const { product_id } = req.params;
-    const { product_name, description, price, stock } = req.body;
+    const { name, category, price, stock } = req.body; // category is category_name
 
-    await ProductModel.updateProduct(product_id, product_name, description, price, stock);
+    // Find the category_id from category name
+    const categoryData = await CategoryModel.getCategoryByName(category);
+
+    if (!categoryData) {
+      return res.status(400).json({ error: "Invalid category name" });
+    }
+
+    const category_id = categoryData.category_id;
+
+    await ProductModel.updateProduct(name, category_id, price, stock, product_id);
 
     res.json({ message: "Product updated successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 export const deleteProduct = async (req, res) => {
   try {

@@ -4,6 +4,7 @@ import {
   addMenuItem,
   editMenuItem,
   removeMenuItem,
+  getSidebarMenus
 } from "../controllers/menuController.js";
 import { authenticateToken } from "../middleware/authMiddleware.js";
 import { checkPermission } from "../middleware/permissionMiddleware.js";
@@ -13,6 +14,9 @@ import { PERMISSIONS } from "../constants.js"
 const router = express.Router();
 
 //add the checkpermission middleware to the all menu routes
+
+router.get('/menus/sidebar', authenticateToken, getSidebarMenus);
+
 
 router.get("/menus",authenticateToken,checkPermission(PERMISSIONS.VIEW_MENU_ITEMS), getMenuItems);
 router.post("/menus",authenticateToken,checkPermission(PERMISSIONS.CREATE_MENU_ITEMS), addMenuItem);

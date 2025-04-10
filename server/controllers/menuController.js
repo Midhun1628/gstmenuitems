@@ -5,6 +5,18 @@ import {
     deleteMenuItem,
   } from "../models/menuModel.js";
   
+
+  import { getSidebarMenusByRoleId } from "../models/menuModel.js";
+
+export const getSidebarMenus = async (req, res) => {
+  try {
+    const user = req.user; // You already extract this in authMiddleware
+    const sidebarMenus = await getSidebarMenusByRoleId(user.role_id);
+    res.json(sidebarMenus);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to load sidebar menus", error });
+  }
+};
   export const getMenuItems = async (req, res) => {
     try {
       const menus = await getAllMenuItems();
@@ -27,8 +39,8 @@ import {
   export const editMenuItem = async (req, res) => {
     try {
       const { menu_id } = req.params;
-      const { menu_name } = req.body;
-      const affected = await updateMenuItem(menu_id, menu_name);
+      const { menu_name,component_path } = req.body;
+      const affected = await updateMenuItem(menu_id, menu_name,component_path);
       if (affected) {
         res.json({ message: "Menu item updated" });
       } else {

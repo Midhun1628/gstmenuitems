@@ -50,7 +50,7 @@ export const useProducts = defineStore('products', {
         const token = localStorage.getItem('token');
         await axios.put(`http://localhost:3000/product/products/${product.id}`, {
           name: product.name,
-          description: product.category,
+          category: product.category,
           price: product.price,
           stock: product.qty
         }, {

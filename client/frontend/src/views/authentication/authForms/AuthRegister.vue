@@ -7,11 +7,11 @@ import SvgSprite from '../../../components/shared/SvgSprite.vue'
 const authStore = useAuthStore();
 const router = useRouter();
 
-const firstname = ref('Paul');
-const lastname = ref('Walker');
-const email = ref('paul@gmail.com');
-const username = ref('Paul12@');
-const password = ref('111');
+const firstname = ref('');
+const lastname = ref('');
+const email = ref('');
+const username = ref('');
+const password = ref('');
 const showPassword = ref(false);
 const errorMessage = ref('');
 const Regform = ref();
@@ -36,7 +36,7 @@ const register = async () => {
 
       router.push('/login');
     } catch (error) {
-      errorMessage.value = error.message || "registration failed" ; 
+      errorMessage.value = error.response?.data || "registration failed" ; 
     }
   
 };

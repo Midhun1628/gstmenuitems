@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const useMenus = defineStore('menus', {
   state: () => ({
-    menus: [] as { menu_id: number; menu_name: string }[],
+    menus: [] as { menu_id: number; menu_name: string ; component_path: string }[],
   }),
 
   getters: {
@@ -29,10 +29,10 @@ export const useMenus = defineStore('menus', {
     },
     
 
-    async createMenu(menuData: { menu_name: string }) {
+    async createMenu(menuData: { menu_name: string , component_path: string}) {
       try {
         const token = localStorage.getItem('token');
-        console.log("token is :", token)
+        
         await axios.post('http://localhost:3000/menu/menus', menuData, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,7 +45,7 @@ export const useMenus = defineStore('menus', {
     },
     
 
-    async updateMenu(menu_id: number, menuData: { menu_name: string }) {
+    async updateMenu(menu_id: number, menuData: { menu_name: string , component_path: string}  ) {
       try {
         const token = localStorage.getItem('token');
         await axios.put(`http://localhost:3000/menu/menus/${menu_id}`, menuData, {

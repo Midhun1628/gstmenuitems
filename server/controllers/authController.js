@@ -51,7 +51,7 @@ export const createUser = async (req, res) => {
   try {
     const { username,email,password,first_name,last_name,role_id } = req.body;
 
-    console.log(username,email,password,first_name,last_name);
+    console.log(username,email,password,first_name,last_name,role_id);
     const userExists = await UserModel.findByEmail(email);
     if (userExists) return res.status(400).json({ message: "User already exists" });
 
