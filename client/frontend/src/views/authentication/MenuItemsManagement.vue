@@ -15,7 +15,8 @@ const searchValue=ref('')
 const store = useMenus();
 const { fetchMenus, createMenu, updateMenu, deleteMenu } = store;
 const { getMenus } = storeToRefs(store);
-
+const menu_name=ref('')
+const component_path=ref('')
 const dialog = ref(false);
 const isEditMode = ref(false);
 const form = ref({ menu_id: null as number | null, menu_name: '' ,component_path: ''});

@@ -17,5 +17,12 @@ export const PERMISSIONS = {
     CREATE_MENU_ITEMS: { action: "create", menu_id: 4 },
     UPDATE_MENU_ITEMS: { action: "update", menu_id: 4 },
     DELETE_MENU_ITEMS: { action: "delete", menu_id: 4 },    
+
+    //Permissions
+    VIEW_PERMISSIONS:   { action: "view", menu_id: 5 },
+    CREATE_PERMISSIONS: { action: "create", menu_id: 5 },
+    UPDATE_PERMISSIONS: { action: "update", menu_id: 5 },
+    DELETE_PERMISSIONS: { action: "delete", menu_id: 5 },
+
   };
   

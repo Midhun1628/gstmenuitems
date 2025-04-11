@@ -28,8 +28,8 @@ export const getSidebarMenus = async (req, res) => {
   
   export const addMenuItem = async (req, res) => {
     try {
-      const { menu_name } = req.body;
-      const insertId = await createMenuItem(menu_name);
+      const { menu_name,component_path } = req.body;
+      const insertId = await createMenuItem(menu_name,component_path);
       res.status(201).json({ message: "Menu item created", menu_id: insertId });
     } catch (error) {
       res.status(500).json({ message: "Error creating menu item", error });

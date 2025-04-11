@@ -28,6 +28,10 @@ const sidebarItem: menu[] = [
   {
     title:'Menu Items',
     to:'/menuitems-management',
+  },
+  {
+    title:'Permission Management',
+    to:'/permission-management'
   }
 ];
 

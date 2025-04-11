@@ -6,8 +6,8 @@ import DashboardLayout from '../../frontend/src/layouts/dashboard/DashboardLayou
 import UserManagement from '../src/views/authentication/UserManagement.vue';
 import ProductManagement from '../src/views/authentication/ProductManagement.vue';
 // import RoleManagement from '../src/views/authentication/RoleManagement.vue';
-import path from 'path';
 import MenuItemsManagement from '../src/views/authentication/MenuItemsManagement.vue';
+import PermissionManagement from '../src/views/authentication/PermissionManagement.vue';
 
 // import ProductManagement if you have it
 
@@ -61,6 +61,12 @@ const routes = [
         path:'/menuitems-management',
         component:MenuItemsManagement,
       },
+
+{
+  path:'/permission-management',
+  component:PermissionManagement
+}
+
       // {
       //   path:'/role',
       //   component:RoleManagement

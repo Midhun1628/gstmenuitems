@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useAuthStore } from '../../../store/auth.js';
+import { useAuthStore } from '../../../store/auth';
 import { useRouter } from 'vue-router';
 import SvgSprite from '../../../components/shared/SvgSprite.vue'
 
@@ -15,7 +15,7 @@ const password = ref('');
 const showPassword = ref(false);
 const errorMessage = ref('');
 const Regform = ref();
-const role_id=ref(2)
+const role_id=ref(3)
 
 // Validation Rules
 const nameRules = ref([(v: string) => !!v || 'This field is required']);

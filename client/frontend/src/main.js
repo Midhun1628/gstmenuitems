@@ -9,7 +9,7 @@ import { PerfectScrollbarPlugin } from 'vue3-perfect-scrollbar';
 import VueApexCharts from 'vue3-apexcharts';
 import VueTablerIcons from 'vue-tabler-icons';
 import Vue3Marquee from 'vue3-marquee';
-
+import Vue3Toastify from 'vue3-toastify'
 import SvgSprite from './../src/components/shared/SvgSprite.vue';
 
 // google-fonts
@@ -53,6 +53,14 @@ const i18n = createI18n({
 });
 
 const app = createApp(App);
+
+app.use(Vue3Toastify, {
+  autoClose: 3000,
+  newestOnTop: true,
+  closeOnClick: true,
+  rtl: false,
+  position: "top-right",
+});
 
 app.use(router);
 app.component('EasyDataTable', DataTable);

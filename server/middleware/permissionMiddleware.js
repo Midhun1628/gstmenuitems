@@ -12,7 +12,7 @@ export const checkPermission = ({ action, menu_id }) => {
 
     try {
       const permissions = await RoleModel.getPermissionsByRole(userRole);
-console.log("permissions are  : ",permissions)
+// console.log("permissions are  : ",permissions)
       const hasPermission = permissions.some(
         (perm) => perm.permission_action === action && perm.menu_id === menu_id
       );

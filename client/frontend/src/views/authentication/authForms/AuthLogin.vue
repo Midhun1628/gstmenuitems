@@ -1,11 +1,15 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '../../../store/auth.ts';
+
 import axios from '../../../../axios/axiosInstance'; // Use this instead of default axios
 import SvgSprite from '../../../components/shared/SvgSprite.vue';
 // import { VueReCaptcha, useReCaptcha } from 'vue-recaptcha-v3';
 
 // Router & reCAPTCHA
+const authStore = useAuthStore();
+
 const router = useRouter();
 // const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
@@ -37,14 +41,8 @@ const passwordRules = [
 // Handle Login
 const login = async () => {
   try {
-    // await recaptcha(); // Ensure reCAPTCHA runs
-    const response = await axios.post('http://localhost:3000/auth/login', {
-      email: email.value,
-      password: password.value,
-    });
-
-    // Store Token and Redirect
-    localStorage.setItem('token', response.data.accessToken);
+    await authStore.login(email.value, password.value);
+   
     router.push('/dashboard');
   } catch (error) {
     errorMsg.value = error.response?.data?.message || 'Login failed';

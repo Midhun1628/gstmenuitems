@@ -6,7 +6,8 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Request interceptor to attach token
+
+// Add access token to requests
 axiosInstance.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -33,7 +34,7 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await axios.get('http://localhost:3000/auth/refresh', {
+        const res = await axios.get('http://localhost:3000/user/refresh', {
           withCredentials: true
         });
 

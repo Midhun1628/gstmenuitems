@@ -1,13 +1,13 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import authRoutes from "./routes/authRoutes.js";
+
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 // import roleRoutes from "./routes/roleRoutes.js";
 import menuRoutes from "./routes/menuRoutes.js";
 import cookieParser from 'cookie-parser';
-
+import permissionRoutes from "./routes/permissionRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -21,11 +21,12 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/product", productRoutes);
 // app.use("/role", roleRoutes);
 app.use("/menu", menuRoutes);
+app.use("/permission",permissionRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

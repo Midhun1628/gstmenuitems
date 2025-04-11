@@ -47,7 +47,7 @@ export const refreshToken = (req, res) => {
   });
 };
 
-export const createUser = async (req, res) => {
+export const registerUser = async (req, res) => {
   try {
     const { username,email,password,first_name,last_name,role_id } = req.body;
 

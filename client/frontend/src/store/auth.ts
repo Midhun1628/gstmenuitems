@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia';
 import axios from 'axios';
 
+import { defineStore } from 'pinia';
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
@@ -10,9 +10,9 @@ export const useAuthStore = defineStore('auth', {
     isAuthenticated: (state) => !!state.token,
   },
   actions: {
-    async login(email, password) {
+    async login(email:string, password :string ) {
       try {
-        const response = await axios.post('http://localhost:3000/auth/login', { email, password });
+        const response = await axios.post('http://localhost:3000/user/login', { email, password });
         this.token = response.data.accessToken;
         localStorage.setItem('token', this.token);
       } catch (error) {
@@ -21,9 +21,9 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     
-    async register(username, email, password,firstname,lastname,role_id) {
+    async register(username :string, email:string, password :string,firstname :string,lastname :string,role_id:number) {
       try {
-        await axios.post('http://localhost:3000/auth/register', { username, email, password,first_name: firstname,last_name: lastname,role_id });
+        await axios.post('http://localhost:3000/user/register', { username, email, password,first_name: firstname,last_name: lastname,role_id });
       } catch (error) {
         console.error( "error is",error.response.data);
         throw error;

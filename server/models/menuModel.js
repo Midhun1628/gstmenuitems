@@ -21,10 +21,10 @@ export const getAllMenuItems = async () => {
   return rows;
 };
 
-export const createMenuItem = async (menu_name) => {
+export const createMenuItem = async (menu_name,component_path) => {
   const [result] = await db.query(
-    "INSERT INTO menu_items (menu_name) VALUES (?)",
-    [menu_name]
+    "INSERT INTO menu_items (menu_name,component_path) VALUES (?,?)",
+    [menu_name,component_path]
   );
   return result.insertId;
 };

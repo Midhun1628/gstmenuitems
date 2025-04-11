@@ -23,7 +23,7 @@ export const getAllUsers = async (req, res) => {
 };
 
 
-export const createUser = async (req, res) => {
+export const createUserByAmin = async (req, res) => {
   try {
     const { username, email, password, first_name, last_name, role_id } = req.body;
     const userExists = await UserModel.findByEmail(email);
