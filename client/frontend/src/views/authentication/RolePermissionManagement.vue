@@ -1,69 +1,70 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import { usePermissions } from '../../store/apps/permissions';
+import { useRolePermissions } from '../../store/apps/rolePermission';
 import BaseBreadcrumb from '../../components/shared/BaseBreadcrumb.vue';
 import SvgSprite from '../../components/shared/SvgSprite.vue';
 import 'vue3-easy-data-table/dist/style.css';
 
-const page = ref({ title: 'Permission Management' });
+const page = ref({ title: 'Role Permission Management' });
 const breadcrumbs = ref([
-  { title: 'Permissions', disabled: false, href: '#' },
+  { title: 'Role Permissions', disabled: false, href: '#' },
   { title: 'List', disabled: true, href: '#' }
 ]);
 
-const store = usePermissions();
+const store = useRolePermissions();
+const rolePermissions = computed(() => store.getRolePermissions);
+const roles = computed(() => store.getRoles);
 const permissions = computed(() => store.getPermissions);
-const menuItems = computed(() => store.getMenuItems);
 
 onMounted(() => {
+  store.fetchRolePermissions();
+  store.fetchRoles();
   store.fetchPermissions();
-  store.fetchMenuItems();
 });
 
 const headers = [
-  { text: 'ID', value: 'permission_id',sortable: true },
-  { text: 'Menu Name', value: 'menu_name',sortable: true },
-  { text: 'Permission Action', value: 'permission_action',sortable: true },
-  { text: 'Permission Name', value: 'permission_name',sortable: true },
+  { text: 'ID', value: 'role_permission_id',sortable: true },
+  { text: 'Role', value: 'role_name',sortable: true },
+  { text: 'Permission', value: 'permission_name',sortable: true },
   { text: 'Actions', value: 'operation',sortable: true }
 ];
 
 const dialog = ref(false);
 const isEdit = ref(false);
 const form = ref({
-  permission_id: 0,
-  menu_name: '',
-  permission_action: ''
+  role_permission_id: 0,
+  role_name: '',
+  permission_name: ''
 });
 
-const openAddPermission = () => {
+const openAdd = () => {
   isEdit.value = false;
-  form.value = { permission_id: 0, menu_name: '', permission_action: '' };
+  form.value = { role_permission_id: 0, role_name: '', permission_name: '' };
   dialog.value = true;
 };
 
-const openEditPermission = (item) => {
+const openEdit = (item) => {
   isEdit.value = true;
   form.value = { ...item };
   dialog.value = true;
 };
 
-const savePermission = async () => {
+const save = async () => {
   const payload = {
-    menu_name: form.value.menu_name,
-    permission_action: form.value.permission_action
+    role_name: form.value.role_name,
+    permission_name: form.value.permission_name
   };
   if (isEdit.value) {
-    await store.updatePermission(form.value.permission_id, payload);
+    await store.updateRolePermission(form.value.role_permission_id, payload);
   } else {
-    await store.addPermission(payload);
+    await store.addRolePermission(payload);
   }
   dialog.value = false;
 };
 
-const deletePermission = async (id:number) => {
-  if (confirm('Delete this permission?')) {
-    await store.deletePermission(id);
+const remove = async (id: number) => {
+  if (confirm('Delete this role permission?')) {
+    await store.deleteRolePermission(id);
   }
 };
 </script>
@@ -79,35 +80,35 @@ const deletePermission = async (id:number) => {
             <v-col cols="12" md="3">
               <v-dialog v-model="dialog" class="customer-modal">
                 <template #activator="{ props }">
-                  <v-btn v-bind="props" color="primary" variant="flat" rounded="md" @click="openAddPermission">
-                    Add Permission
+                  <v-btn v-bind="props" color="primary" variant="flat" rounded="md" @click="openAdd">
+                    Add Role Permission
                   </v-btn>
                 </template>
                 <v-card>
                   <v-card-title class="pa-5">
-                    <span class="text-h5">{{ isEdit ? 'Edit' : 'Add' }} Permission</span>
+                    <span class="text-h5">{{ isEdit ? 'Edit' : 'Add' }} Role Permission</span>
                   </v-card-title>
                   <v-divider />
                   <v-card-text>
                     <v-container>
                       <v-row>
                         <v-col cols="12">
-                          <v-label class="mb-2">Menu</v-label>
+                          <v-label class="mb-2">Role</v-label>
                           <v-select
-                            v-model="form.menu_name"
-                            :items="menuItems.map(menu => menu.menu_name)"
+                            v-model="form.role_name"
+                            :items="roles.map(r => r.role_name)"
                             variant="outlined"
-                            placeholder="Select Menu"
+                            placeholder="Select Role"
                             hide-details
                           />
                         </v-col>
                         <v-col cols="12">
-                          <v-label class="mb-2">Permission Action</v-label>
+                          <v-label class="mb-2">Permission</v-label>
                           <v-select
-                            v-model="form.permission_action"
-                            :items="['create', 'view', 'edit', 'delete']"
+                            v-model="form.permission_name"
+                            :items="permissions.map(p => p.permission_name)"
                             variant="outlined"
-                            placeholder="Select Action"
+                            placeholder="Select Permission"
                             hide-details
                           />
                         </v-col>
@@ -118,7 +119,7 @@ const deletePermission = async (id:number) => {
                   <v-card-actions>
                     <v-spacer />
                     <v-btn color="error" variant="text" @click="dialog = false">Cancel</v-btn>
-                    <v-btn color="primary" variant="flat" @click="savePermission">
+                    <v-btn color="primary" variant="flat" @click="save">
                       {{ isEdit ? 'Update' : 'Create' }}
                     </v-btn>
                   </v-card-actions>
@@ -131,15 +132,15 @@ const deletePermission = async (id:number) => {
         <v-card-text class="pa-0">
           <EasyDataTable
             :headers="headers"
-            :items="permissions"
+            :items="rolePermissions"
             table-class-name="customize-table"
             :rows-per-page="10"
           >
-            <template #item-operation="{ permission_id }">
-              <v-btn icon variant="text" color="primary" @click="openEditPermission(permissions.find(p => p.permission_id === permission_id))">
+            <template #item-operation="{ role_permission_id }">
+              <v-btn icon variant="text" color="primary" @click="openEdit(rolePermissions.find(p => p.role_permission_id === role_permission_id))">
                 <SvgSprite name="custom-edit-outline" style="width: 20px; height: 20px" />
               </v-btn>
-              <v-btn icon variant="text" color="error" @click="deletePermission(permission_id)">
+              <v-btn icon variant="text" color="error" @click="remove(role_permission_id)">
                 <SvgSprite name="custom-trash" style="width: 20px; height: 20px" />
               </v-btn>
             </template>

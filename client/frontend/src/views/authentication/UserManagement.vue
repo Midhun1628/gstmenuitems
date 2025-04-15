@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, shallowRef } from 'vue';
-import { useCustomers } from '../../store/apps/customers.ts';
+import { useCustomers } from '../../store/apps/users.ts';
 import { storeToRefs } from 'pinia';
 import SvgSprite from '../../components/shared/SvgSprite.vue';
 import BaseBreadcrumb from '../../components/shared/BaseBreadcrumb.vue';

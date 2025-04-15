@@ -6,6 +6,12 @@ import SvgSprite from '../../components/shared/SvgSprite.vue';
 import type { Header, Item } from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 
+import { useCategories } from '../../store/apps/products'; // new import
+
+
+const categoryStore = useCategories();
+const categories = computed(() => categoryStore.categories);
+
 const page = ref({ title: 'Product Management' });
 const breadcrumbs = ref([
   { title: 'Product', disabled: false, href: '#' },
@@ -14,6 +20,15 @@ const breadcrumbs = ref([
 
 const store = useProducts();
 const getProducts = computed(() => store.getProducts);
+
+//category used for adding and editing
+
+onMounted(async () => {
+  await Promise.all([
+    store.fetchProducts(),
+    categoryStore.fetchCategories()
+  ]);
+});
 
 onMounted(() => {
   store.fetchProducts();
@@ -123,13 +138,16 @@ const deleteProduct = async (id) => {
                                 <v-col cols="12">
   <v-label class="mb-2">Category</v-label>
   <v-select
-    v-model="form.category"
-    :items="categories"
-    label="Select category"
-    variant="outlined"
-    density="comfortable"
-    hide-details
-  />
+  v-model="form.category"
+  :items="categories"
+  item-title="category_name"
+  item-value="category_id"
+  label="Select category"
+  variant="outlined"
+  density="comfortable"
+  hide-details
+/>
+
 </v-col>
 
                                 <v-col cols="12" md="6">

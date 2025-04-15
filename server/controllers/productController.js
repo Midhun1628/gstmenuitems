@@ -1,4 +1,4 @@
-import CategoryModel from '../models/CategoryModel.js'; // Make sure this exists
+import {getCategoryByName,getAllCategories} from '../models/SubModels/CategoryModel.js'; // Make sure this exists
 import { ProductModel } from "../models/productModel.js";
 
 export const getAllProducts = async (req, res) => {
@@ -29,7 +29,7 @@ export const updateProduct = async (req, res) => {
     const { name, category, price, stock } = req.body; // category is category_name
 
     // Find the category_id from category name
-    const categoryData = await CategoryModel.getCategoryByName(category);
+    const categoryData = await getCategoryByName(category);
 
     if (!categoryData) {
       return res.status(400).json({ error: "Invalid category name" });

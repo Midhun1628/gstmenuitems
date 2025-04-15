@@ -21,17 +21,21 @@ const sidebarItem: menu[] = [
 
     to: '/product-management',
   },
-  // {
-  //   title: 'Role Management',
-  //   to: '/role'
-  // },
   {
-    title:'Menu Items',
+    title:'Menu Management',
     to:'/menuitems-management',
+  },
+  {
+    title: 'Role Management',
+    to: '/role-management'
   },
   {
     title:'Permission Management',
     to:'/permission-management'
+  },
+  {
+    title:'Role Permission Management',
+    to:'/rolePermission-management'
   }
 ];
 

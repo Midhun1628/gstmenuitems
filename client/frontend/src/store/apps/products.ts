@@ -34,6 +34,7 @@ export const useProducts = defineStore('products', {
         await axios.post('http://localhost:3000/product/products', {
           name: product.product_name,
           id: product.product_id,
+          category: product.category,
           price: product.purchase_unit_price,
           stock: product.stock_quantity
         }, {
@@ -71,6 +72,28 @@ export const useProducts = defineStore('products', {
         await this.fetchProducts();
       } catch (error) {
         console.error('Error deleting product:', error);
+      }
+    }
+  }
+});
+
+
+//category stores used inside the products
+
+export const useCategories = defineStore('categories', {
+  state: () => ({
+    categories: []
+  }),
+  actions: {
+    async fetchCategories() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:3000/category/categories', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        this.categories = response.data.map((cat) => cat.category_name);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
       }
     }
   }

@@ -5,9 +5,10 @@ import Dashboard from '../src/views/authentication/Dashboard.vue';
 import DashboardLayout from '../../frontend/src/layouts/dashboard/DashboardLayout.vue';
 import UserManagement from '../src/views/authentication/UserManagement.vue';
 import ProductManagement from '../src/views/authentication/ProductManagement.vue';
-// import RoleManagement from '../src/views/authentication/RoleManagement.vue';
+import RoleManagement from '../src/views/authentication/RoleManagement.vue';
 import MenuItemsManagement from '../src/views/authentication/MenuItemsManagement.vue';
 import PermissionManagement from '../src/views/authentication/PermissionManagement.vue';
+import RolePermissionManagement from '../src/views/authentication/RolePermissionManagement.vue';
 
 // import ProductManagement if you have it
 
@@ -62,15 +63,19 @@ const routes = [
         component:MenuItemsManagement,
       },
 
-{
-  path:'/permission-management',
-  component:PermissionManagement
-}
-
-      // {
-      //   path:'/role',
-      //   component:RoleManagement
-      // }
+      {
+        path:'/permission-management',
+         component:PermissionManagement
+      }
+,
+      {
+        path:'/role-management',
+        component:RoleManagement
+      },
+      {
+        path:'rolePermission-management',
+        component:RolePermissionManagement
+      }
     ]
   },
 

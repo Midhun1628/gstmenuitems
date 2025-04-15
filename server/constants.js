@@ -24,5 +24,18 @@ export const PERMISSIONS = {
     UPDATE_PERMISSIONS: { action: "update", menu_id: 5 },
     DELETE_PERMISSIONS: { action: "delete", menu_id: 5 },
 
+  //Roles
+  VIEW_ROLES: { action: "view", menu_id: 6 },
+  CREATE_ROLES: { action: "create", menu_id: 6 },
+  UPDATE_ROLES: { action: "update", menu_id: 6 },
+  DELETE_ROLES: { action: "delete", menu_id: 6 },
+
+//Role Permission
+
+View_RolePermission: { action: "view", menu_id: 7 },
+Create_RolePermission: { action: "create", menu_id: 7 },
+Update_RolePermission: { action: "update", menu_id: 7 },
+Delete_RolePermission: { action: "delete", menu_id: 7 },
+
   };
   

@@ -34,3 +34,12 @@ export const updatePermissionModel = async (id, { menu_id, permission_action }) 
 export const deletePermissionModel= async (id) => {
   await db.query(`DELETE FROM permissions WHERE permission_id = ?`, [id]);
 };
+
+
+
+//using in role_permission management
+
+export const getPermissionIdByName = async (permissionName) => {
+  const [rows] = await db.query('SELECT permission_id FROM permissions WHERE permission_name = ?', [permissionName]);
+  return rows[0]?.permission_id;  
+}

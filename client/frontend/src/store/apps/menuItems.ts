@@ -1,6 +1,6 @@
 // stores/apps/menus.ts
 import { defineStore } from 'pinia';
-import axios from 'axios';
+import axios from '../../../axios/axiosInstance';
 
 export const useMenus = defineStore('menus', {
   state: () => ({
