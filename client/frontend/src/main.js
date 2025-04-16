@@ -4,6 +4,9 @@ import App from './App.vue';
 import  router  from '../routes/index.js';
 import vuetify from './../src/plugins/vuetify.ts'
 
+import Toast from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
+
 import '@/scss/style.scss';
 import { PerfectScrollbarPlugin } from 'vue3-perfect-scrollbar';
 import VueApexCharts from 'vue3-apexcharts';
@@ -54,13 +57,12 @@ const i18n = createI18n({
 
 const app = createApp(App);
 
-app.use(Vue3Toastify, {
-  autoClose: 3000,
-  newestOnTop: true,
-  closeOnClick: true,
-  rtl: false,
-  position: "top-right",
-});
+app.use(Toast, {
+  // Optional settings
+  position: 'top-right',
+  timeout: 3000,
+})
+
 
 app.use(router);
 app.component('EasyDataTable', DataTable);

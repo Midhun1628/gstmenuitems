@@ -84,7 +84,7 @@ const routes = [
     path: '/logout',
     name: 'logout',
     beforeEnter: (to, from, next) => {
-      localStorage.removeItem('token');
+      localStorage.clear()
       next('/login');
     }
   }

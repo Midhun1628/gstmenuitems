@@ -34,26 +34,29 @@ export const usePermissions = defineStore('permissions', {
 
     async addPermission(data) {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:3000/permission/permissions', data, {
+      const res=   await axios.post('http://localhost:3000/permission/permissions', data, {
         headers: { Authorization: `Bearer ${token}` }
       });
       await this.fetchPermissions();
+      return res.data; //return data for displaying toast message
     },
 
     async updatePermission(id:number, data) {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:3000/permission/${id}`, data, {
+      const res = await axios.put(`http://localhost:3000/permission/${id}`, data, {
         headers: { Authorization: `Bearer ${token}` }
       });
       await this.fetchPermissions();
+      return res.data; //return data for displaying toast message
     },
 
     async deletePermission(id) {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:3000/permission/${id}`, {
+      const res=await axios.delete(`http://localhost:3000/permission/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       await this.fetchPermissions();
+      return res.data;
     }
   },
 

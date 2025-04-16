@@ -5,6 +5,9 @@ import BaseBreadcrumb from '../../components/shared/BaseBreadcrumb.vue';
 import SvgSprite from '../../components/shared/SvgSprite.vue';
 import 'vue3-easy-data-table/dist/style.css';
 
+import { useToast } from 'vue-toastification'
+const toast = useToast()
+
 const page = ref({ title: 'Permission Management' });
 const breadcrumbs = ref([
   { title: 'Permissions', disabled: false, href: '#' },
@@ -53,19 +56,36 @@ const savePermission = async () => {
     menu_name: form.value.menu_name,
     permission_action: form.value.permission_action
   };
-  if (isEdit.value) {
-    await store.updatePermission(form.value.permission_id, payload);
-  } else {
-    await store.addPermission(payload);
+  try {
+    let res;
+    if (isEdit.value) {
+      res = await store.updatePermission(form.value.permission_id, payload);
+    } else {
+      res = await store.addPermission(payload);
+    }
+    toast.success(res.message || 'Operation successful');
+    dialog.value = false;
+  } catch (err) {
+    if (err.response && err.response.status === 409) {
+      toast.error(err.response.data.message || 'Permission already exists');
+    } else {
+      toast.error(err.response?.data?.error || 'An error occurred');
+    }
   }
-  dialog.value = false;
 };
 
-const deletePermission = async (id:number) => {
+
+const deletePermission = async (id: number) => {
   if (confirm('Delete this permission?')) {
-    await store.deletePermission(id);
+    try {
+      const res = await store.deletePermission(id);
+      toast.success(res.message || 'Permission deleted');
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'An error occurred while deleting');
+    }
   }
 };
+
 </script>
 
 <template>

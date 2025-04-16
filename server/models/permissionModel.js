@@ -1,6 +1,18 @@
 // models/permissionModel.js
 import db from '../config/db.js';
 
+
+// to check if their is duplicate permission 
+
+export const isPermissionExists = async (menu_id, permission_action) => {
+  const [rows] = await db.query(
+    `SELECT * FROM permissions WHERE menu_id = ? AND permission_action = ?`,
+    [menu_id, permission_action]
+  );
+  return rows.length > 0;
+};
+
+
 export const getAllPermissionModel = async () => {
   const [rows] = await db.query(`
     SELECT p.permission_id, p.permission_action, p.permission_name, 

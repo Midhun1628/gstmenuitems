@@ -1,6 +1,7 @@
 import db from "../config/db.js";
 
 export class RoleModel {
+
   // Returns array of { menu_id, permission_action } for a given role_id
   static async getPermissionsByRole(role_id) {
     const [rows] = await db.query(

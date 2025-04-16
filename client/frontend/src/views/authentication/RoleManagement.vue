@@ -7,6 +7,10 @@ import BaseBreadcrumb from '../../components/shared/BaseBreadcrumb.vue';
 import type { Header, Item } from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 
+import { useToast } from 'vue-toastification'
+import { log } from 'console';
+const toast = useToast()
+
 const page = ref({ title: 'Role Management' });
 
 const breadcrumbs = shallowRef([
@@ -42,14 +46,27 @@ const openAddRoleModal = () => {
 };
 
 const handleSubmit = async () => {
-  if (isEditMode.value && roleForm.value.role_id !== null) {
-    await updateRole(roleForm.value.role_id, roleForm.value);
-  } else {
-    await createRole(roleForm.value);
+  try {
+    console.log('',roleForm.value);
+    
+    if (isEditMode.value && roleForm.value.role_id !== null) {
+      await updateRole(roleForm.value.role_id, roleForm.value);
+      toast.success('Role updated successfully');
+    } else {
+      await createRole(roleForm.value);
+      toast.success('Role created successfully');
+    }
+    dialog.value = false;
+    resetForm();
+  } catch (err) {
+    if (err.response && err.response.status === 403) {
+      toast.error(err.response.data.message || 'Role already exists');
+    } else {
+      toast.error('An error occurred');
+    }
   }
-  dialog.value = false;
-  resetForm();
 };
+
 
 const editRole = (item: any) => {
   roleForm.value = {
@@ -59,6 +76,19 @@ const editRole = (item: any) => {
   isEditMode.value = true;
   dialog.value = true;
 };
+
+
+//delete function
+
+const handleDelete = async (id: number) => {
+  try {
+    await deleteRole(id)
+    toast.error('Role deleted successfully')
+  } catch (err) {
+    toast.error('Failed to delete role')
+  }
+}
+
 
 const itemsSelected = ref<Item[]>([]);
 const themeColor = ref('rgb(var(--v-theme-primary))');
@@ -157,7 +187,7 @@ const headers: Header[] = [
                 <v-btn icon color="primary" variant="text" @click="editRole(item)" rounded="md">
                   <SvgSprite name="custom-edit-outline" style="width: 20px; height: 20px" />
                 </v-btn>
-                <v-btn icon color="error" variant="text" @click="deleteRole(item.role_id)" rounded="md">
+                <v-btn icon color="error" variant="text" @click="handleDelete(item.role_id)" rounded="md">
                   <SvgSprite name="custom-trash" style="width: 20px; height: 20px" />
                 </v-btn>
               </div>

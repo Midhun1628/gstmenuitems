@@ -1,6 +1,5 @@
 import { RoleModel } from "../models/roleModel.js";
 
-
 export const getAllRoles = async (req, res) => {
   try {
     const roles = await RoleModel.getAllRoles();
@@ -16,7 +15,7 @@ export const createRole = async (req, res) => {
 
     const existingRole = await RoleModel.findByName(role_name);
     if (existingRole) {
-      return res.status(400).json({ message: "Role already exists" });
+      return res.status(403).json({ message: "Role already exists" });
     }
 
     const roleId = await RoleModel.createRole(role_name);
@@ -31,12 +30,21 @@ export const updateRole = async (req, res) => {
     const { role_id } = req.params;
     const { role_name } = req.body;
 
+    console.log('role id  ', typeof( role_id));
+    
+
+    const existingRole = await RoleModel.findByName(role_name);
+    if (existingRole && existingRole.role_id != role_id) {
+      return res.status(409).json({ message: "Role already exists" });
+    }
+
     await RoleModel.updateRole(role_id, role_name);
     res.json({ message: "Role updated successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 export const deleteRole = async (req, res) => {
   try {
