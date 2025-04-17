@@ -73,7 +73,7 @@ const getStyleObject = () => {
         </v-container>
         <v-container fluid class="pt-0">
           <div :class="customizer.boxed ? 'maxWidth' : ''">
-            <FooterPanel />
+            
           </div>
         </v-container>
       </v-main>

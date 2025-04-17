@@ -49,12 +49,13 @@ export const useRolePermissions = defineStore('rolePermissions', {
       await this.fetchRolePermissions();
     },
 
-    async deleteRolePermission(id: number) {
+    async deleteRolePermission(rolePermission_id ) {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:3000/rolePermission/rolePermissions/${id}`, {
+      await axios.delete(`http://localhost:3000/rolePermission/rolePermissions/${rolePermission_id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       await this.fetchRolePermissions();
+      
     }
   },
 

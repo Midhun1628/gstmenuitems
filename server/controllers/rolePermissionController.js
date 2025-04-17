@@ -45,6 +45,8 @@ export const update = async (req, res) => {
 
 export const remove = async (req, res) => {
   const { id } = req.params;
+  console.log("id for remove:",id);
+  
   try {
     await RolePermission.deleteRolePermission(id);
     res.json({ message: 'Role permission deleted' });

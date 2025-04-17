@@ -33,7 +33,7 @@ const horizontalItems: menu[] = [
           },
           {
             title: 'Analytics',
-            to: '/dashboard/analytics'
+            to: '/'
           }
         ]
       },

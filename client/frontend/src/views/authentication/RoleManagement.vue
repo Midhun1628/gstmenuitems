@@ -8,14 +8,13 @@ import type { Header, Item } from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 
 import { useToast } from 'vue-toastification'
-import { log } from 'console';
 const toast = useToast()
 
 const page = ref({ title: 'Role Management' });
 
 const breadcrumbs = shallowRef([
   { title: 'Admin', disabled: false, href: '#' },
-  { title: 'Roles', disabled: true, href: '#' }
+  { title: 'List', disabled: true, href: '#' }
 ]);
 
 const store = useRoles();
@@ -48,13 +47,13 @@ const openAddRoleModal = () => {
 const handleSubmit = async () => {
   try {
     console.log('',roleForm.value);
-    
+    let res
     if (isEditMode.value && roleForm.value.role_id !== null) {
-      await updateRole(roleForm.value.role_id, roleForm.value);
+     res= await updateRole(roleForm.value.role_id, roleForm.value);
       toast.success('Role updated successfully');
     } else {
-      await createRole(roleForm.value);
-      toast.success('Role created successfully');
+     res= await createRole(roleForm.value);
+      toast.success(res.message);
     }
     dialog.value = false;
     resetForm();

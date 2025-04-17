@@ -11,6 +11,7 @@ const breadcrumbs = ref([
   { title: 'List', disabled: true, href: '#' }
 ]);
 
+const searchField = ref('menu_name');
 const searchValue=ref('')
 const store = useMenus();
 const { fetchMenus, createMenu, updateMenu, deleteMenu } = store;
@@ -68,7 +69,7 @@ const itemsSelected = ref<Item[]>([]);
                 type="text"
                 variant="outlined"
                 persistent-placeholder
-                placeholder="Search products..."
+                placeholder="Search menu name..."
                 v-model="searchValue"
                 density="comfortable"
                 hide-details
@@ -133,6 +134,8 @@ const itemsSelected = ref<Item[]>([]);
         :headers="headers"
         :items="getMenus"
         table-class-name="customize-table invoice-table"
+         :search-field="searchField"
+            :search-value="searchValue"
         :rows-per-page="10"
         v-model:items-selected="itemsSelected"
       >

@@ -2,16 +2,14 @@
 import { ref, onMounted, computed } from 'vue';
 import { usePermissions } from '../../store/apps/permissions';
 import BaseBreadcrumb from '../../components/shared/BaseBreadcrumb.vue';
-import SvgSprite from '../../components/shared/SvgSprite.vue';
-import 'vue3-easy-data-table/dist/style.css';
+import { useToast } from 'vue-toastification';
 
-import { useToast } from 'vue-toastification'
-const toast = useToast()
+const toast = useToast();
 
 const page = ref({ title: 'Permission Management' });
 const breadcrumbs = ref([
   { title: 'Permissions', disabled: false, href: '#' },
-  { title: 'List', disabled: true, href: '#' }
+  { title: 'Cards', disabled: true, href: '#' }
 ]);
 
 const store = usePermissions();
@@ -23,157 +21,139 @@ onMounted(() => {
   store.fetchMenuItems();
 });
 
-const headers = [
-  { text: 'ID', value: 'permission_id',sortable: true },
-  { text: 'Menu Name', value: 'menu_name',sortable: true },
-  { text: 'Permission Action', value: 'permission_action',sortable: true },
-  { text: 'Permission Name', value: 'permission_name',sortable: true },
-  { text: 'Actions', value: 'operation',sortable: true }
-];
-
-const dialog = ref(false);
-const isEdit = ref(false);
-const form = ref({
-  permission_id: 0,
-  menu_name: '',
-  permission_action: ''
-});
-
-const openAddPermission = () => {
-  isEdit.value = false;
-  form.value = { permission_id: 0, menu_name: '', permission_action: '' };
-  dialog.value = true;
+// Helper: get permission by menu_name and action
+const hasPermission = (menuName: string, action: string) => {
+  return permissions.value.some(
+    (perm) => perm.menu_name === menuName && perm.permission_action === action
+  );
 };
 
-const openEditPermission = (item) => {
-  isEdit.value = true;
-  form.value = { ...item };
-  dialog.value = true;
-};
-
-const savePermission = async () => {
-  const payload = {
-    menu_name: form.value.menu_name,
-    permission_action: form.value.permission_action
-  };
+const togglePermission = async (menuName: string, action: string, enabled: boolean) => {
   try {
-    let res;
-    if (isEdit.value) {
-      res = await store.updatePermission(form.value.permission_id, payload);
+    if (enabled) {
+      // Add permission
+      const payload = { menu_name: menuName, permission_action: action };
+      const res = await store.addPermission(payload);
+      toast.success(res.message || 'Permission added');
     } else {
-      res = await store.addPermission(payload);
+      // Delete permission
+      const perm = permissions.value.find(
+        (p) => p.menu_name === menuName && p.permission_action === action
+      );
+      if (perm) {
+        const res = await store.deletePermission(perm.permission_id);
+        toast.error(res.message || 'Permission removed');
+      }
     }
-    toast.success(res.message || 'Operation successful');
-    dialog.value = false;
   } catch (err) {
-    if (err.response && err.response.status === 409) {
-      toast.error(err.response.data.message || 'Permission already exists');
-    } else {
-      toast.error(err.response?.data?.error || 'An error occurred');
-    }
+    toast.error(err.response?.data?.error || 'An error occurred');
   }
 };
-
-
-const deletePermission = async (id: number) => {
-  if (confirm('Delete this permission?')) {
-    try {
-      const res = await store.deletePermission(id);
-      toast.success(res.message || 'Permission deleted');
-    } catch (err) {
-      toast.error(err.response?.data?.error || 'An error occurred while deleting');
-    }
-  }
-};
-
 </script>
 
 <template>
   <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs" />
 
-  <v-row>
-    <v-col cols="12">
-      <v-card elevation="0" variant="outlined" class="bg-surface overflow-hidden" rounded="lg">
-        <v-card-item>
-          <v-row justify="end">
-            <v-col cols="12" md="3">
-              <v-dialog v-model="dialog" class="customer-modal">
-                <template #activator="{ props }">
-                  <v-btn v-bind="props" color="primary" variant="flat" rounded="md" @click="openAddPermission">
-                    Add Permission
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title class="pa-5">
-                    <span class="text-h5">{{ isEdit ? 'Edit' : 'Add' }} Permission</span>
-                  </v-card-title>
-                  <v-divider />
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12">
-                          <v-label class="mb-2">Menu</v-label>
-                          <v-select
-                            v-model="form.menu_name"
-                            :items="menuItems.map(menu => menu.menu_name)"
-                            variant="outlined"
-                            placeholder="Select Menu"
-                            hide-details
-                          />
-                        </v-col>
-                        <v-col cols="12">
-                          <v-label class="mb-2">Permission Action</v-label>
-                          <v-select
-                            v-model="form.permission_action"
-                            :items="['create', 'view', 'edit', 'delete']"
-                            variant="outlined"
-                            placeholder="Select Action"
-                            hide-details
-                          />
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-                  <v-divider />
-                  <v-card-actions>
-                    <v-spacer />
-                    <v-btn color="error" variant="text" @click="dialog = false">Cancel</v-btn>
-                    <v-btn color="primary" variant="flat" @click="savePermission">
-                      {{ isEdit ? 'Update' : 'Create' }}
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-col>
-          </v-row>
-        </v-card-item>
-        <v-divider />
-        <v-card-text class="pa-0">
-          <EasyDataTable
-            :headers="headers"
-            :items="permissions"
-            table-class-name="customize-table"
-            :rows-per-page="10"
-          >
-            <template #item-operation="{ permission_id }">
-              <v-btn icon variant="text" color="primary" @click="openEditPermission(permissions.find(p => p.permission_id === permission_id))">
-                <SvgSprite name="custom-edit-outline" style="width: 20px; height: 20px" />
-              </v-btn>
-              <v-btn icon variant="text" color="error" @click="deletePermission(permission_id)">
-                <SvgSprite name="custom-trash" style="width: 20px; height: 20px" />
-              </v-btn>
-            </template>
-          </EasyDataTable>
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
+  <div class="cards-wrapper">
+    <div
+      v-for="menu in menuItems"
+      :key="menu.menu_id"
+      class="card"
+    >
+      <h2 class="card-title">{{ menu.menu_name }}</h2>
+
+      <div class="permissions-container">
+        <div
+          v-for="action in ['view', 'create', 'update', 'delete']"
+          :key="action"
+          class="permission-item"
+        >
+          <label :for="`${menu.menu_name}-${action}`" class="text-sm font-medium capitalize">{{ action }}</label>
+          <input
+            type="checkbox"
+            :id="`${menu.menu_name}-${action}`"
+            class="toggle-switch"
+            :checked="hasPermission(menu.menu_name, action)"
+            @change="togglePermission(menu.menu_name, action, $event.target.checked)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style lang="scss" scoped>
-.customer-modal {
-  width: calc(100% - 48px);
-  min-width: 340px;
-  max-width: 820px;
+<style scoped>
+.cards-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: start;
+  padding: 20px;
+}
+
+/* Card Structure */
+.card {
+  width: 250px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Title Styling */
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Container for the Permission Switches */
+.permissions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+/* Each Permission Item */
+.permission-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  width: 40px;
+  height: 20px;
+  appearance: none;
+  background-color: #ddd;
+  border-radius: 9999px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.toggle-switch:checked {
+  background-color: #4ade80;
+}
+
+.toggle-switch::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 9999px;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  transition: transform 0.3s;
+}
+
+.toggle-switch:checked::before {
+  transform: translateX(20px);
 }
 </style>

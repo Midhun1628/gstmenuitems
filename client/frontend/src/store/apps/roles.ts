@@ -30,11 +30,12 @@ export const useRoles = defineStore('roles', {
     async createRole(roleData: object) {
       try {
         const token = localStorage.getItem('token');
-        await axios.post('http://localhost:3000/role/roles', roleData, {
+       const res= await axios.post('http://localhost:3000/role/roles', roleData, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
         await this.fetchRoles();
+        return res.data
       } catch (error) {
         console.error('Failed to create role:', error.message);
       }
@@ -43,11 +44,12 @@ export const useRoles = defineStore('roles', {
     async updateRole(role_id: number, updatedData: object) {
       try {
         const token = localStorage.getItem('token');
-        await axios.put(`http://localhost:3000/role/roles/${role_id}`, updatedData, {
+       const res= await axios.put(`http://localhost:3000/role/roles/${role_id}`, updatedData, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
         await this.fetchRoles();
+        return res.data
       } catch (error) {
         console.error('Failed to update role:', error);
       }
@@ -56,11 +58,12 @@ export const useRoles = defineStore('roles', {
     async deleteRole(role_id: number) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`http://localhost:3000/role/roles/${role_id}`, {
+       const res= await axios.delete(`http://localhost:3000/role/roles/${role_id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
         this.roles = this.roles.filter(r => r.role_id !== role_id);
+        return res.data;
       } catch (error) {
         console.error('Failed to delete role:', error);
       }
